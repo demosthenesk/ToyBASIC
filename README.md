@@ -1,5 +1,7 @@
 # ToyBASIC a BASIC interpreter
 
+<img title="" src="file:///home/user/Documents/Workspaces/freebasic/ToyBASIC/ToyBASIC.git/toy.png" alt="toy.png" data-align="center" width="171">
+  
 ToyBASIC is a small project to learn how an interpeter is written in FreeBASIC !
 
 This work is on progress...
