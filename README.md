@@ -10,4 +10,4 @@ This work is on progress...
 
 where code.toy is text file with the code of BASIC dialect for ToyBASIC.
 
-
+Available for linux so far... but you can compile it too in Windows, Mac or DOS with FreeBASIC.
