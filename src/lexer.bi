@@ -80,7 +80,7 @@ function IndetifyToken(Char as string) As Token
             Return r
         Case "0" To "9"
             ' Parse numbers
-            While Char >= "0" And Char <= "9"
+            While (Char >= "0" And Char <= "9") Or Char = "."
                 Lexeme = Lexeme + Char
                 Char = Advance()
             Wend
@@ -105,7 +105,7 @@ function IndetifyToken(Char as string) As Token
 		Return r
 	End Select
 	r.Type_= TokenType.TOKEN_EOF
-	r.Lexeme = ""
+	r.Lexeme = chr(0)
 	r.Value=0
 	Return r
 end function
@@ -117,7 +117,8 @@ Function GetNextToken() As Token
 	Do
 		Char = Advance()
 		return IndetifyToken(Char)
-	Loop While Char = " " Or Char = Chr(9) Or Char = Chr(10) Or Char = Chr(13) or CurrentPosition <= Len(SourceCode)
+	Loop While Char <> chr(0)
+'	Loop While Char = " " Or Char = Chr(9) Or Char = Chr(10) Or Char = Chr(13) or CurrentPosition <= Len(SourceCode)
 	' Skip whitespace characters
 '	Loop While Char = " " Or Char = Chr(9) Or Char = Chr(10) Or Char = Chr(13)
 
