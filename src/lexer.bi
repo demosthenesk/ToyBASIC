@@ -35,7 +35,7 @@ End Sub
 Function Advance() As string
     Dim Char As string
     If CurrentPosition <= Len(SourceCode) Then
-        Char = Mid(SourceCode, CurrentPosition, 1) 'FIXME Mid returns 2 chars, example 1+
+        Char = Mid(SourceCode, CurrentPosition, 1)
         CurrentPosition = CurrentPosition + 1
    elseif CurrentPosition > Len(SourceCode) Then
         Char = Chr(0) ' End of file marker
@@ -79,7 +79,7 @@ function IndetifyToken(Char as string) As Token
 			r.Value=0
             Return r
         Case "0" To "9"
-            ' Parse numbers
+            ' Scan numbers
             While (Char >= "0" And Char <= "9") Or Char = "."
                 Lexeme = Lexeme + Char
                 Char = Advance()
@@ -92,12 +92,11 @@ function IndetifyToken(Char as string) As Token
 			r.Value=Value
             Return r
         Case Else
-        ' Parse identifiers
+        ' Scan identifiers
         While (Char >= "A" And Char <= "Z") Or (Char >= "a" And Char <= "z")
 			Lexeme = Lexeme + Char
 			Char = Advance()
 		Wend
-'		if (Char <>" " Or Char <> Chr(9) Or Char <> Chr(10) Or Char <> Chr(13)) then CurrentPosition = CurrentPosition - 1 ' Go back one character
 		if Char <>" " then CurrentPosition = CurrentPosition - 1 ' Go back one character
 		r.Type_= TokenType.TOKEN_IDENTIFIER
 		r.Lexeme= Lexeme
@@ -113,13 +112,8 @@ end function
 ' Function to read a token from the source code
 Function GetNextToken() As Token
 	Dim Char As string
-
 	Do
 		Char = Advance()
 		return IndetifyToken(Char)
-	Loop While Char <> chr(0)
-'	Loop While Char = " " Or Char = Chr(9) Or Char = Chr(10) Or Char = Chr(13) or CurrentPosition <= Len(SourceCode)
-	' Skip whitespace characters
-'	Loop While Char = " " Or Char = Chr(9) Or Char = Chr(10) Or Char = Chr(13)
-
+	Loop While Char <> chr(0) 'Loop until reach NULL=EOF
 End Function
