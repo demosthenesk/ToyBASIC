@@ -29,9 +29,9 @@ Sub OpenFile()
 	DIM line_ AS STRING
 	WHILE NOT EOF(file)
 		LINE INPUT #file, line_
-		Code = Code +" "+ line_
+		Code = Code + line_+ chr(10)
 	WEND
-
+	
 	' Close the file
 	CLOSE file
 	
@@ -49,14 +49,12 @@ End Sub
 Sub Main()
 	' Get the filename from the command-line argument
 	OpenFile()
-
-	'without spaces works
-'	Code = "1+32*(356+x)"
-	
-	'with spaces work
-	'Code = "1 + 32 * ( 3 + xzy+q)"
+	'Initialize Lexer
 	InitLexer(Code)
+	'Ommit first Token is NULL
+	'CurrentToken = GetNextToken()
 
+	'Get ALL Tokens
 	While True
 		CurrentToken = GetNextToken()
 		If CurrentPosition > Len(SourceCode) Then Exit While
@@ -64,6 +62,7 @@ Sub Main()
 		Print "Type: "; CurrentToken.Type_
 		Print "Lexeme: "; CurrentToken.Lexeme
 		Print "Value: "; CurrentToken.Value
+		Print "LineNumber: "; CurrentToken.LineNumber
 		Print
 		sleep
 	Wend
