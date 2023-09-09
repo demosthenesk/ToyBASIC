@@ -3,6 +3,7 @@
 ' Define token types
 Enum TokenType
     TOKEN_EOF = 0
+    TOKEN_ROOT
     TOKEN_IDENTIFIER
     TOKEN_NUMBER
     TOKEN_PLUS
@@ -24,6 +25,8 @@ Enum TokenType
     TOKEN_ENDIF
     TOKEN_DOUBLE_QUOTES
     TOKEN_PRINT
+    TOKEN_DIM
+    TOKEN_AS
 End Enum
 
 ' Define a data structure to represent tokens
@@ -64,7 +67,13 @@ Function IdentifyToken(Char As String) As Token
     Dim Lexeme As String = ""
     Dim r As Token
     Select Case Char
-        Case chr(34)
+        Case chr(0) 'Case Char= NULL
+            r.Type_ = TokenType.TOKEN_EOF
+            r.Lexeme = chr(0)
+            r.Value = 0
+            r.LineNumber = LineNumber
+            Return r
+        Case chr(34) 'Case Char= "
             r.Type_ = TokenType.TOKEN_DOUBLE_QUOTES
             r.Lexeme = chr(34)
             r.Value = 0
@@ -194,7 +203,24 @@ Function IdentifyToken(Char As String) As Token
             While (Char >= "0" And Char <= "9") Or (Char >= "A" And Char <= "Z") Or (Char >= "a" And Char <= "z") Or Char = "_"
                 Lexeme = Lexeme + Char
                 Char = Advance()
-            Wend			'IF TOKEN
+            Wend
+			'DIM TOKEN
+			If Lexeme = "DIM" then
+				r.Type_ = TokenType.TOKEN_DIM
+				r.Lexeme = Lexeme
+				r.Value = 0
+				r.LineNumber = LineNumber
+				Return r
+			endif
+			'AS TOKEN
+			If Lexeme = "AS" then
+				r.Type_ = TokenType.TOKEN_AS
+				r.Lexeme = Lexeme
+				r.Value = 0
+				r.LineNumber = LineNumber
+				Return r
+			endif
+			'IF TOKEN
 			If Lexeme = "IF" then
 				r.Type_ = TokenType.TOKEN_IF
 				r.Lexeme = Lexeme
@@ -251,12 +277,11 @@ Function IdentifyToken(Char As String) As Token
 End Function
 
 ' Function to read a token from the source code
-Function GetNextToken() As Token
+Function LexerGetNextToken() As Token
 	Dim Char As string
-'	Do
+
 	while Char <> chr(0)
 		Char = Advance()
 		return IdentifyToken(Char)
 	wend
-'	Loop While Char <> chr(0) 'or Char = " " Or Char = Chr(9) Or Char = Chr(10) Or Char = Chr(13)	'Loop until reach NULL=EOF, Or Char is whitespace
 End Function

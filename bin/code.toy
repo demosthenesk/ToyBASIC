@@ -1,9 +1,2 @@
-IF x<=10 THEN 
-    PRINT "hello1"
-ELSE
-    PRINT 12
-ENDIF
+2 * (3 + 4)
 
-IF x>=10 THEN PRINT "hello2"
-
-DIM x10_ AS INTEGER

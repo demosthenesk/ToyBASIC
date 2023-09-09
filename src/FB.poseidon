@@ -16,7 +16,9 @@ name=/home/user/Bin/FreeBASIC/FreeBASIC-1.10.0-source/lib/freebasic/linux-x86_64
 [Sources]
 name=main.bas
 [Includes]
+name=ast.bi
 name=lexer.bi
+name=parser.bi
 [Others]
 [Misc]
 name=code.toy

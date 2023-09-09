@@ -1,4 +1,6 @@
-#include "lexer.bi"
+#include once "lexer.bi"
+#include once "ast.bi"
+#include once "parser.bi"
 
 Dim shared Code As String
 
@@ -45,28 +47,39 @@ Sub OpenFile()
 	endif
 End Sub
 
+Sub ShowTokens()
+	'Get ALL Tokens
+	While True
+		CurrentToken = LexerGetNextToken()
+		Print "Type: "; CurrentToken.Type_
+		Print "Lexeme: "; CurrentToken.Lexeme
+		Print "Value: "; CurrentToken.Value
+		Print "LineNumber: "; CurrentToken.LineNumber
+		Print
+		if CurrentToken.Type_ = TokenType.TOKEN_EOF Then Exit While
+		sleep
+	Wend
+	print "~~END LEXER~~"
+	sleep
+End sub
+
 ' Main program for testing the lexer
 Sub Main()
 	' Get the filename from the command-line argument
 	OpenFile()
 	'Initialize Lexer
 	InitLexer(Code)
-	'Ommit first Token is NULL
-	'CurrentToken = GetNextToken()
+'	ShowTokens()
 
-	'Get ALL Tokens
-	While True
-		CurrentToken = GetNextToken()
-		If CurrentPosition > Len(SourceCode) Then Exit While
-		if CurrentToken.Type_ = TokenType.TOKEN_EOF Then Exit While
-		Print "Type: "; CurrentToken.Type_
-		Print "Lexeme: "; CurrentToken.Lexeme
-		Print "Value: "; CurrentToken.Value
-		Print "LineNumber: "; CurrentToken.LineNumber
-		Print
-		sleep
-	Wend
-	print "~~END~~"
+	' Build the AST
+	Dim AstRoot As AstNode Ptr = ParseEval()
+'	Dim AstRoot As AstNode Ptr = BuildAstFromTokens()
+	' Visit and perform an operation on each node of the AST
+'	VisitAstNodes(AstRoot)
+
+	Dim Result As Double = EvaluateExpression(AstRoot)
+	Print "Result: "; Result
+	print "~~END PARSING~~"
 	sleep
 End Sub
 
