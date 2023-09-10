@@ -4,7 +4,7 @@ declare Function Match(As TokenType) As Boolean
 declare Function ParsePrimary() As AstNode Ptr
 declare Function ParseExpression() As AstNode Ptr
 declare Function ParseEval() As AstNode Ptr
-declare Function EvaluateExpression(Node As AstNode Ptr) As Double
+declare Function EvaluateExpression(As AstNode Ptr, As double) As Double
 declare Sub VisitAstNodes(As AstNode Ptr)
 declare Function ParseTerm() As AstNode Ptr
 
@@ -90,50 +90,78 @@ Function ParseEval() As AstNode Ptr
     Return ParseExpression()
 End Function
 
+Dim shared Result As Double = 0 ' Initialize Result outside the loop
+
 ' Function to evaluate an AST expression and return the result
-Function EvaluateExpression(Node As AstNode Ptr) As Double
+Function EvaluateExpression(Node As AstNode Ptr, Result as double) As Double
+
     If Node = Null Then
         ' Handle error or invalid expression
-        Print "Null Ast Node, returning 0"
-        Return 0 ' You can handle errors accordingly
+        Print "Null Ast Node!"
+		'Result = Result + 0
+'        Return Result        
+		Return 0
     End If
 
-    Dim Result As Double = 0 ' Initialize Result outside the loop
+'    While (Node <> Null)
+'		if Node->Type_ = TokenType.TOKEN_EOF then exit while
+'		print "Type: " & Node->Type_
+'		print "Lexeme: " & Node->Lexeme
+'		print "Value: " & Node->Value
+'		print "Left: " & Node->Left_
+'		print "Right: " & Node->Right_
+'		print ""
 
-    While Node->Type_ <> TokenType.TOKEN_EOF
         Select Case Node->Type_
             Case TokenType.TOKEN_NUMBER
                 Result = Node->Value
+				print "NUMBER= " & Result
             Case TokenType.TOKEN_PLUS
-                Result = Result + EvaluateExpression(Node->Left_) + EvaluateExpression(Node->Right_)
+				print "PLUS"
+				print "Node->Left_: " & Node->Left_->Value
+				print "PLUS Result before: " & Result
+				Result = Result + EvaluateExpression(Node->Left_, Result)
+				print "PLUS Result after: " & Result
+				print
             Case TokenType.TOKEN_MINUS
-                Result = Result + EvaluateExpression(Node->Left_) - EvaluateExpression(Node->Right_)
-            Case TokenType.TOKEN_MULTIPLY
-                Result = Result * EvaluateExpression(Node->Left_) * EvaluateExpression(Node->Right_)
-            Case TokenType.TOKEN_DIVIDE
-                Dim RightValue As Double = EvaluateExpression(Node->Right_)
-                If RightValue <> 0 Then
-                    Result = Result * EvaluateExpression(Node->Left_) / RightValue
-                Else
-                    ' Handle division by zero error
-                    Print "Error: Division by zero."
-                    Print "Terminate interpreter"
-                    End
-                    Return 0 ' You can handle errors accordingly
-                End If
-            Case TokenType.TOKEN_LEFT_PAREN
-                ' Handle open parenthesis: Evaluate the expression inside the parentheses
-                Result = EvaluateExpression(Node->Left_)
-            Case TokenType.TOKEN_RIGHT_PAREN
-                ' Handle close parenthesis: Continue evaluating the expression after parentheses
-                Result = EvaluateExpression(Node->Left_)
-            Case TokenType.TOKEN_IDENTIFIER
-                ' Handle identifiers (customize this based on your use)
-                ' For example, you might have a symbol table to look up variable values.
-                ' Result = LookUpVariableValue(Node->Lexeme)
-                ' This is a placeholder; you should implement the logic for identifiers.
-            Case TokenType.TOKEN_NEWLINE
-                Result = Result + 0
+				print "MINUS"
+				print "Node->Left_: " & Node->Left_->Value
+				print "MINUS Result before: " & Result
+                Result = Result - EvaluateExpression(Node->Left_, Result)
+				print "MINUS Result after: " & Result
+				print
+			Case TokenType.TOKEN_MULTIPLY
+				print "MULTIPLY"
+				print "Node->Left_: " & Node->Left_->Value
+				print "MULTIPLY Result before: " & Result
+                Result = Result * EvaluateExpression(Node->Left_, Result)
+				print "MULTIPLY Result after: " & Result
+				print
+'            Case TokenType.TOKEN_DIVIDE
+'                Dim RightValue As Double = EvaluateExpression(Node->Right_)
+'                If RightValue <> 0 Then
+'                    Result = Result * EvaluateExpression(Node->Left_) / RightValue
+'                Else
+'                    ' Handle division by zero error
+'                    Print "Error: Division by zero."
+'                    Print "Terminate interpreter"
+'                    End
+''                    Return 0 ' You can handle errors accordingly
+'                End If
+'            Case TokenType.TOKEN_LEFT_PAREN
+'                ' Handle open parenthesis: Evaluate the expression inside the parentheses
+'                Result = EvaluateExpression(Node->Left_)
+'            Case TokenType.TOKEN_RIGHT_PAREN
+'                ' Handle close parenthesis: Continue evaluating the expression after parentheses
+'                Result = EvaluateExpression(Node->Left_)
+'            Case TokenType.TOKEN_IDENTIFIER
+'				print "IDENTIFIER Lexeme asc(): " & asc(Node->Lexeme)
+'                ' Handle identifiers (customize this based on your use)
+'                ' For example, you might have a symbol table to look up variable values.
+'                ' Result = LookUpVariableValue(Node->Lexeme)
+'                ' This is a placeholder; you should implement the logic for identifiers.
+'            Case TokenType.TOKEN_NEWLINE
+'                Result = Result + 0
             Case Else
                 ' Handle other cases or operators
                 Print "Node->Type_:" & Node->Type_
@@ -144,17 +172,24 @@ Function EvaluateExpression(Node As AstNode Ptr) As Double
         End Select
 
         ' Move to the next node
-        If Node <> Null Then
-            Node = Node->Right_
-        End If
+		if Node <> Null then
+			Node = Node->Right_
+			if Node <> Null then
+				Result = EvaluateExpression(Node, Result)
+			endif
+		endif
+		
 
-        If Node = Null Then
-            ' Handle error or invalid expression
-            Print "Null Ast Node, returning 0"
-            Return 0 ' You can handle errors accordingly
-        End If
-    Wend
+'        If Node = Null Then
+'			dim Node As AstNode ptr
+'			Node = Node->Right_
+'            ' Handle error or invalid expression
+'            Print "Null Ast Node, returning 0"
+''            Return 0 ' You can handle errors accordingly
+'        End If
+'    Wend
 
+	print "FINAL Result: " & Result
     Return Result
 End Function
 

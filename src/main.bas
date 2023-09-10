@@ -77,8 +77,8 @@ Sub Main()
 	' Visit and perform an operation on each node of the AST
 '	VisitAstNodes(AstRoot)
 
-	Dim Result As Double = EvaluateExpression(AstRoot)
-	Print "Result: "; Result
+	Result = EvaluateExpression(AstRoot, 0)
+	Print "Result Main: "; Result
 	print "~~END PARSING~~"
 	sleep
 End Sub
