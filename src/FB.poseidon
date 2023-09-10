@@ -6,7 +6,7 @@ PassOneFile=OFF
 TargetName=
 FocusOn=
 CompilerArgs=code.toy
-CompilerOption=
+CompilerOption=-exx
 Comment=
 CompilerPath=/home/user/Bin/FreeBASIC/FreeBASIC-1.10.0-source/bin/fbc
 [IncludeDirs]

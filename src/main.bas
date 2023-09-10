@@ -72,8 +72,8 @@ Sub Main()
 '	ShowTokens()
 
 	' Build the AST
-	Dim AstRoot As AstNode Ptr = ParseEval()
-'	Dim AstRoot As AstNode Ptr = BuildAstFromTokens()
+'	Dim AstRoot As AstNode Ptr = ParseEval()
+	Dim AstRoot As AstNode Ptr = BuildAstFromTokens()
 	' Visit and perform an operation on each node of the AST
 '	VisitAstNodes(AstRoot)
 

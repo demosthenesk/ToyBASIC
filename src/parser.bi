@@ -94,6 +94,7 @@ End Function
 Function EvaluateExpression(Node As AstNode Ptr) As Double
     If Node = Null Then
         ' Handle error or invalid expression
+        Print "Null Ast Node, returning 0"
         Return 0 ' You can handle errors accordingly
     End If
 
@@ -108,25 +109,50 @@ Function EvaluateExpression(Node As AstNode Ptr) As Double
             Case TokenType.TOKEN_MINUS
                 Result = Result + EvaluateExpression(Node->Left_) - EvaluateExpression(Node->Right_)
             Case TokenType.TOKEN_MULTIPLY
-                Result = Result + EvaluateExpression(Node->Left_) * EvaluateExpression(Node->Right_)
+                Result = Result * EvaluateExpression(Node->Left_) * EvaluateExpression(Node->Right_)
             Case TokenType.TOKEN_DIVIDE
                 Dim RightValue As Double = EvaluateExpression(Node->Right_)
                 If RightValue <> 0 Then
-                    Result = Result + EvaluateExpression(Node->Left_) / RightValue
+                    Result = Result * EvaluateExpression(Node->Left_) / RightValue
                 Else
                     ' Handle division by zero error
+                    Print "Error: Division by zero."
+                    Print "Terminate interpreter"
+                    End
                     Return 0 ' You can handle errors accordingly
                 End If
             Case TokenType.TOKEN_LEFT_PAREN
                 ' Handle open parenthesis: Evaluate the expression inside the parentheses
-                Result = Result + EvaluateExpression(Node->Left_)
+                Result = EvaluateExpression(Node->Left_)
+            Case TokenType.TOKEN_RIGHT_PAREN
+                ' Handle close parenthesis: Continue evaluating the expression after parentheses
+                Result = EvaluateExpression(Node->Left_)
+            Case TokenType.TOKEN_IDENTIFIER
+                ' Handle identifiers (customize this based on your use)
+                ' For example, you might have a symbol table to look up variable values.
+                ' Result = LookUpVariableValue(Node->Lexeme)
+                ' This is a placeholder; you should implement the logic for identifiers.
+            Case TokenType.TOKEN_NEWLINE
+                Result = Result + 0
             Case Else
                 ' Handle other cases or operators
+                Print "Node->Type_:" & Node->Type_
+                Print "Error: Unsupported operators"
+                Print "Terminate interpreter"
+                End
                 Return 0 ' You can handle errors or unsupported operators accordingly
         End Select
 
         ' Move to the next node
-        Node = Node->Right_
+        If Node <> Null Then
+            Node = Node->Right_
+        End If
+
+        If Node = Null Then
+            ' Handle error or invalid expression
+            Print "Null Ast Node, returning 0"
+            Return 0 ' You can handle errors accordingly
+        End If
     Wend
 
     Return Result

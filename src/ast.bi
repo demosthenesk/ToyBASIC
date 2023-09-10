@@ -14,8 +14,9 @@ declare Function BuildAstFromTokens() As AstNode Ptr
 ' Function to build the AST for all tokens
 Function BuildAstFromTokens() As AstNode Ptr
     Dim AstRoot As AstNode Ptr = Allocate(Len(AstNode))
-    AstRoot->Type_ = TokenType.TOKEN_ROOT
+    AstRoot->Type_ = TokenType.TOKEN_EOF
 '    AstRoot->Lexeme = "" 'FIXME pops up a blank window
+	'Aborting due to runtime error 14 ("abnormal termination" signal) in /home/user/Documents/Workspaces/freebasic/ToyBASIC/ast.bi::BUILDASTFROMTOKENS()
 print ""
 sleep(1)
     AstRoot->Value = 0
