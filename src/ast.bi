@@ -42,7 +42,8 @@ sleep(1) 'FIXME if remove sleep(1) Aborting due to runtime error 14 ("abnormal t
 '		print Token_.Lexeme
 		
         ' Create a new AST node for the token
-        Dim TokenNode As AstNode Ptr = Allocate(Len(AstNode))
+        'Dim TokenNode As AstNode Ptr = Allocate(Len(AstNode))
+		Dim TokenNode As AstNode Ptr = new AstNode
         TokenNode->Type_ = Token_.Type_
         TokenNode->Lexeme = Token_.Lexeme
         TokenNode->Value = Token_.Value
