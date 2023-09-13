@@ -14,9 +14,10 @@ declare Function IsOperator(As TokenType) As Boolean
 
 ' Function to build the AST for an arithmetic expression
 Function BuildAstFromTokens() As AstNode Ptr
-    Dim AstRoot As AstNode Ptr = Allocate(Len(AstNode))
+    'Dim AstRoot As AstNode Ptr = Allocate(Len(AstNode))
+	Dim AstRoot As AstNode Ptr = new AstNode
     AstRoot->Type_ = TokenType.TOKEN_ROOT
-'    AstRoot->Lexeme = "AST_ROOT" ' Give it a descriptive name
+    AstRoot->Lexeme = "AST_ROOT" ' Give it a descriptive name
 print ""
 sleep(1) 'FIXME if remove sleep(1) Aborting due to runtime error 14 ("abnormal termination" signal) in /home/user/Documents/Workspaces/freebasic/ToyBASIC/ast.bi::BUILDASTFROMTOKENS()
     AstRoot->Value = 0
